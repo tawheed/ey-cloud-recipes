@@ -1,0 +1,7 @@
+= SHORT DESCRIPTION:
+
+Tout Cookbook.  
+
+= DESCRIPTION:
+
+Tout Cookbook that sets up some basic stuff required to run the platform.
