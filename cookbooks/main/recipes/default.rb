@@ -8,7 +8,7 @@
 # require_recipe "sphinx"
 
 #uncomment to turn on memcached
-# require_recipe "memcached"
+require_recipe "memcached"
 
 #uncomment to run the authorized_keys recipe
 #require_recipe "authorized_keys"
@@ -30,11 +30,11 @@
 #  password "password"
 #end
 
-#uncomment to run the resque recipe
-#require_recipe "resque"
+# uncomment to run the resque recipe
+require_recipe "resque"
 
 #uncomment to run the redis recipe
-#require_recipe "redis"
+require_recipe "redis"
 
 #require_recipe "logrotate"
 #
@@ -53,3 +53,5 @@
 #uncomment to include the mysql_administrative_tools recipe
 # additional configuration of this recipe is required
 #require_recipe "mysql_administrative_tools"
+
+require_recipe "tout"

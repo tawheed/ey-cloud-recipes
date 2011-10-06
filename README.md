@@ -14,3 +14,11 @@ Follow these steps to use custom deployment recipes with your applications.
 * Once you have completed these steps, each rebuild will run the your
   recipes after the default Engine Yard recipes have run. When you
   update your recipes, just re-run `ey recipes upload -e ENV`.
+
+
+
+For Tout
+========
+1. Update appropriate recipe
+2. Upload using:
+    ey recipes upload -e ToutProduction

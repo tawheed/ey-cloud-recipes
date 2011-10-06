@@ -9,36 +9,35 @@ if ['solo', 'util'].include?(node[:instance_role])
     not_if { "gem list | grep resque" }
   end
 
-  case node[:ec2][:instance_type]
-    when 'm1.small': worker_count = 2
-    when 'c1.medium': worker_count = 3
-    when 'c1.xlarge': worker_count = 8
-      else 
-        worker_count = 4
-    end
+  workers = %w{ab ab ab email,analytics email,analytics, crm}
+  num_workers = workers.length
   
-
-    node[:applications].each do |app, data|
-      template "/etc/monit.d/resque_#{app}.monitrc" do 
-      owner 'root' 
-      group 'root' 
-      mode 0644 
-      source "monitrc.conf.erb" 
-      variables({ 
-      :num_workers => worker_count,
-      :app_name => app, 
-      :rails_env => node[:environment][:framework_env] 
-      }) 
-      end
-
-      worker_count.times do |count|
-        template "/data/#{app}/shared/config/resque_#{count}.conf" do
+  node[:applications].each do |app, data|
+    template "/etc/monit.d/resque_#{app}.monitrc" do 
+    owner 'root' 
+    group 'root' 
+    mode 0644 
+    source "monitrc.conf.erb" 
+    variables({ 
+    :num_workers => num_workers,
+    :app_name => app, 
+    :rails_env => node[:environment][:framework_env] 
+    }) 
+    end
+    
+    count = 0
+    workers.each do |worker_queue|
+      template "/data/#{app}/shared/config/resque_#{count}.conf" do
         owner node[:owner_name]
         group node[:owner_name]
         mode 0644
-        source "resque_wildcard.conf.erb"
-        end
+        source "resque.conf.erb"
+        variables({
+          :queue => worker_queue
+        })
       end
+      count = count + 1
+    end
 
     execute "ensure-resque-is-setup-with-monit" do 
       command %Q{ 
@@ -52,4 +51,18 @@ if ['solo', 'util'].include?(node[:instance_role])
       }
     end
   end 
+end
+
+node[:applications].each do |app, data|
+  if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
+    template "/data/#{app}/shared/config/resque.yml" do
+      owner node[:owner_name]
+      group node[:owner_name]
+      mode 0644
+      source "resque.yml.erb"    
+      variables({
+          :server_name => node[:utility_instances].first[:hostname]
+      })    
+    end  
+  end
 end
