@@ -20,7 +20,7 @@ if ['solo', 'util'].include?(node[:instance_role])
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
     hour "13"
     user "deploy"
-  end  
+  end
 end
 
 
