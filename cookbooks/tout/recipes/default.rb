@@ -16,13 +16,15 @@ if ['solo', 'util'].include?(node[:instance_role])
     user "deploy"
   end
   
+end
+
+if node[:name] == 'Resque1'
   cron "Run metrics" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
-    hour "13"
+    hour "3"
     user "deploy"
   end
 end
-
 
 if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   # We want to make sure that each database.yml file uses the same database in this environment
