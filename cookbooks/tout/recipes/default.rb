@@ -3,6 +3,8 @@
 # Recipe:: default
 #
 
+# Set up CRON Jobs
+
 if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Enqueue Scheduled Tout Pitches" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake tout:scheduler"
@@ -25,6 +27,8 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
     user "deploy"
   end
 end
+
+# Set up Database configuration for Tout Admin
 
 if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   # We want to make sure that each database.yml file uses the same database in this environment
@@ -54,6 +58,8 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   end
 end
 
+# Set up Custom SSL config for security purposes
+
 if ['app', 'app_master'].include?(node[:instance_role])
   node.engineyard.apps.each do |app|
     nginx_ssl_config_filename = "/etc/nginx/servers/#{app.name}.ssl.conf"
@@ -64,4 +70,38 @@ if ['app', 'app_master'].include?(node[:instance_role])
       end
     end
   end
+end
+
+# Set up remote_syslog
+execute "install remote_syslog gem" do
+  command "gem install remote_syslog"
+end
+
+# Install the remote_syslog start/stop script.
+template '/etc/init.d/remote_syslog' do
+  owner 'root'
+  group 'root'
+  mode 0755
+  source 'init.d-remote_syslog.erb'
+end
+
+# Set up the configuration file
+template "/etc/log_files.yml" do
+  @log_files = ["/var/log/nginx/*", "/var/log/chef.main.log", "/var/log/chef.custom.log", "/var/log/mysql/*", "/db/mysql/log/slow_query.log"]
+  node.engineyard.apps.each do |app|
+    @log_files << "/data/#{app.name}/current/log/*"
+  end
+  
+  owner node[:owner_name]
+  group node[:owner_name]
+  mode 0644
+  source "log_files.yml.erb"    
+  variables({
+      :hostname => node[:hostname],
+      :log_files => @log_files
+  })
+end  
+
+execute "ensure-remote-syslog-is-running" do
+    command "/etc/init.d/remote_syslog start"
 end
