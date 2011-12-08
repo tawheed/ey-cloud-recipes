@@ -55,9 +55,11 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
 end
 
 if ['app', 'app_master'].include?(node[:instance_role])
-  nginx_ssl_config_filename = "/etc/nginx/servers/#{app.name}.ssl.conf"
-  ssl_param_modified_output = File.read(nginx_ssl_config_filename).gsub(/^ssl_ciphers (.*);/, "ssl_ciphers HIGH:!ADH;")
-  File.open(nginx_ssl_config_filename, "w") do |out|
-    out << ssl_param_modified_output
+  node.engineyard.apps.each do |app|
+    nginx_ssl_config_filename = "/etc/nginx/servers/#{app.name}.ssl.conf"
+    ssl_param_modified_output = File.read(nginx_ssl_config_filename).gsub(/^ssl_ciphers (.*);/, "ssl_ciphers HIGH:!ADH;")
+    File.open(nginx_ssl_config_filename, "w") do |out|
+      out << ssl_param_modified_output
+    end
   end
 end
