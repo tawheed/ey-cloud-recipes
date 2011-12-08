@@ -3,7 +3,7 @@
 # Recipe:: default
 #
 
-if ['solo', 'util'].include?(node[:instance_role])
+if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Enqueue Scheduled Tout Pitches" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake tout:scheduler"
     minute "*/5"
@@ -18,7 +18,7 @@ if ['solo', 'util'].include?(node[:instance_role])
   
 end
 
-if node[:name] == 'Resque1'
+if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Run metrics" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
     hour "3"
@@ -51,5 +51,13 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
         :slaves => node.engineyard.environment.db_slaves_hostnames
       })
     end
+  end
+end
+
+if ['app', 'app_master'].include?(node[:instance_role])
+  nginx_ssl_config_filename = "/etc/nginx/servers/#{app.name}.ssl.conf"
+  ssl_param_modified_output = File.read(nginx_ssl_config_filename).gsub(/^ssl_ciphers (.*);/, "ssl_ciphers HIGH:!ADH;")
+  File.open(nginx_ssl_config_filename, "w") do |out|
+    out << ssl_param_modified_output
   end
 end
