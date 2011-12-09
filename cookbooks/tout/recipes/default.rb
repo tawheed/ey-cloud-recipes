@@ -89,7 +89,9 @@ end
 template "/etc/log_files.yml" do
   @log_files = ["/var/log/nginx/*", "/var/log/chef.main.log", "/var/log/chef.custom.log", "/var/log/mysql/*", "/db/mysql/log/slow_query.log"]
   node.engineyard.apps.each do |app|
-    @log_files << "/data/#{app.name}/current/log/*"
+    @log_files << "/data/#{app.name}/current/log/production.log"
+    @log_files << "/data/#{app.name}/current/log/resque.log"    
+    @log_files << "/data/#{app.name}/current/log/unicorn.log"    
   end
   
   owner node[:owner_name]
@@ -103,5 +105,5 @@ template "/etc/log_files.yml" do
 end  
 
 execute "ensure-remote-syslog-is-running" do
-    command "/etc/init.d/remote_syslog start"
+    command "/etc/init.d/remote_syslog restart"
 end

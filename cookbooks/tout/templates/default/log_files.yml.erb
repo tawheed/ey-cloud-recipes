@@ -1,0 +1,6 @@
+files: [ <%= @log_files.join(", ")%> ]
+hostname: <%= @hostname%>
+destination:
+  host: logs.papertrailapp.com
+  port: 59535
+
