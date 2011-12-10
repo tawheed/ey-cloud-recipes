@@ -72,6 +72,16 @@ if ['app', 'app_master'].include?(node[:instance_role])
   end
 end
 
+# Set up SSL forced redirect for Tout
+if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
+  template "/etc/nginx/servers/#{app}/custom.conf" do
+    owner node[:owner_name]
+    group node[:owner_name]
+    mode 0644
+    source "custom.conf.erb"    
+  end  
+end
+
 # Set up remote_syslog
 execute "install remote_syslog gem" do
   command "gem install remote_syslog"
