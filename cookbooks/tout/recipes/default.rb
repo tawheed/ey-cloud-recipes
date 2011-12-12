@@ -15,6 +15,7 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Remind Customers About Trials Ending" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake trials:remind"
     hour "12"
+    minute "0"
     user "deploy"
   end
   
@@ -24,6 +25,7 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Run metrics" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
     hour "3"
+    minute "0"
     user "deploy"
   end
 end
@@ -73,8 +75,8 @@ if ['app', 'app_master'].include?(node[:instance_role])
 end
 
 # Set up SSL forced redirect for Tout
-if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
-  template "/etc/nginx/servers/#{app}/custom.conf" do
+if ['solo', 'app', 'app_master'].include?(node[:instance_role])
+  template "/etc/nginx/servers/Tout/custom.conf" do
     owner node[:owner_name]
     group node[:owner_name]
     mode 0644

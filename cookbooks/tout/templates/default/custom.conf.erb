@@ -1,1 +1,3 @@
-rewrite ^ https://$host$request_uri permanent;
+if ($http_user_agent !~* 'Toutapp/1.1.1.1') {
+  rewrite ^ https://$host$request_uri permanent;
+}
