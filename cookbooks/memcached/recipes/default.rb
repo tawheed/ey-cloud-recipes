@@ -16,7 +16,7 @@ case node[:instance_role]
      mode 0744
      variables({
          :app_name => app_name,
-         :server_names => node[:members]
+         :server_name => node[:master_app_server][:private_dns_name]
      })
    end
 
