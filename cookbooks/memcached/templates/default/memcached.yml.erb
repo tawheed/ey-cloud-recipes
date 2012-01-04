@@ -21,7 +21,7 @@ defaults:
   benchmarking: false
   sessions: false
   fragments: true
-  <% unless @server_names.nil? %>
+  <% unless @server_name.nil? %>
   servers:
   - <%= @server_name%>:11211
   <% end %>
