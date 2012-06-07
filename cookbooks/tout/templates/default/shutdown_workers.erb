@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo -e "\033[1mRequesting shutdown of workers...\033[0m"
+sudo monit stop -g Tout_resque;
+
+echo -e "\033[1mWaiting for a bit...\033[0m"
+sleep 3
+
+echo -e "\033[1mForcefully killing non-essential workers...\033[0m"
+kill -9 $(ps aux | grep 'Processing ab' | awk '{print $2}')

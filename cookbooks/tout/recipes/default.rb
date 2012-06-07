@@ -97,6 +97,18 @@ template '/etc/init.d/remote_syslog' do
   source 'init.d-remote_syslog.erb'
 end
 
+if ['solo', 'util'].include?(node[:instance_role])
+  # Install the script for forcefully shutting down non-essential workers
+  # and for gracefully shutting down essential workers 
+  # so that deployment can proceed
+  template "/data/Tout/shutdown_workers" do 
+    owner 'deploy'
+    group 'deploy'
+    mode 0755
+    source 'shutdown_workers.erb'
+  end
+end
+
 # Set up the configuration file
 template "/etc/log_files.yml" do
   @log_files = ["/var/log/nginx/*", "/var/log/chef.main.log", "/var/log/chef.custom.log", "/var/log/mysql/*", "/db/mysql/log/slow_query.log"]
