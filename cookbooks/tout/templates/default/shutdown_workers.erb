@@ -8,3 +8,9 @@ sleep 3
 
 echo -e "\033[1mForcefully killing non-essential workers...\033[0m"
 kill -9 $(ps aux | grep 'Processing ab' | awk '{print $2}')
+
+echo -e "\033[1mWaiting for a bit...\033[0m"
+sleep 3
+
+echo -e "\033[1mForcefully killing non-essential workers (again, just to be sure)...\033[0m"
+kill -9 $(ps aux | grep 'Processing ab' | awk '{print $2}')
