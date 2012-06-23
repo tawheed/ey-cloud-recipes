@@ -12,13 +12,11 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
     user "deploy"
   end
 
-  cron "Remind Customers About Trials Ending" do
-    command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake trials:remind"
-    hour "12"
-    minute "0"
+  cron "Run the Statsd Processor" do
+    command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake tout:statsd"
+    minute "*/1"
     user "deploy"
   end
-  
 end
 
 if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
