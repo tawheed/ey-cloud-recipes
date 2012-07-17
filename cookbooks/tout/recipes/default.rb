@@ -14,7 +14,6 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
 
   cron "Run the Statsd Processor" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake tout:statsd"
-    minute "*/1"
     user "deploy"
   end
 end
