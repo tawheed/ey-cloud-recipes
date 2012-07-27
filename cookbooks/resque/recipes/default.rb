@@ -61,7 +61,7 @@ node[:applications].each do |app, data|
       mode 0644
       source "resque.yml.erb"    
       variables({
-          :server_name => node[:utility_instances].first[:hostname]
+          :server_name => (node[:utility_instances].select { |n| n.name == "ResqueAndRedis"}).first
       })    
     end  
   end
