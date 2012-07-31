@@ -9,7 +9,7 @@ if ['solo', 'util'].include?(node[:instance_role])
     not_if { "gem list | grep resque" }
   end
 
-  workers = %w{ab email gmail gmail,email analytics,email crm signals}
+  workers = %w{ab email gmail gmail,email analytics,email crm,user signals user}
   num_workers = workers.length
   
   node[:applications].each do |app, data|
@@ -61,7 +61,7 @@ node[:applications].each do |app, data|
       mode 0644
       source "resque.yml.erb"    
       variables({
-          :server_name => (node[:utility_instances].select { |n| n.name == "ResqueAndRedis"}).first
+          :server_name => node[:utility_instances].first[:hostname]
       })    
     end  
   end
