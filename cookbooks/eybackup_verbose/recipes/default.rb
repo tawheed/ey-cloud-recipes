@@ -10,6 +10,9 @@ cron_hour = if node[:backup_interval].to_s == '24'
               "1"
             end
 
+# override cron_hour to avoid production peak times
+cron_hour = "1"
+
 
 if ['solo', 'db_master'].include?(node[:instance_role])
   cron "eybackup" do
