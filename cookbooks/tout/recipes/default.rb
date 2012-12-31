@@ -138,3 +138,22 @@ end
 # execute "ensure-remote-syslog-is-running" do
 #     command "/etc/init.d/remote_syslog restart"
 # end
+
+
+# Set up packages needed for DocSplit
+package_list = [
+  'graphicsmagick',
+  'poppler-utils',
+  'poppler-data',
+  'pdftk',
+  'tesseract',
+  'ghostscript',
+  'ttf-mscorefonts-installer',
+  'openoffice.org',
+  'openoffice.org-java-common'
+]
+for package_name in package_list do
+  package package_name do
+    action :install
+  end
+end
