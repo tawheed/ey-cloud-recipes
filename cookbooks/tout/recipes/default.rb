@@ -58,7 +58,6 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
 end
 
 # Set up Custom SSL config for security purposes
-
 if ['app', 'app_master'].include?(node[:instance_role])
   node.engineyard.apps.each do |app|
     nginx_ssl_config_filename = "/etc/nginx/servers/#{app.name}.ssl.conf"
@@ -80,6 +79,17 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
     source "custom.conf.erb"    
   end  
 end
+
+# Set up SSL subdomain handling
+if ['solo', 'app', 'app_master'].include?(node[:instance_role])
+  template "/etc/nginx/servers/Tout/custom.ssl.conf" do
+    owner node[:owner_name]
+    group node[:owner_name]
+    mode 0644
+    source "custom.ssl.conf.erb"    
+  end  
+end
+
 
 # Set up remote_syslog
 # execute "install remote_syslog gem" do
