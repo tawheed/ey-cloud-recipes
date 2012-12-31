@@ -53,6 +53,9 @@ if ['solo', 'util'].include?(node[:instance_role])
   end 
 end
 
+resque_and_redis_instances = @node["utility_instances"].select { |ui| ui["name"].match(/ResqueAndRedis/) }
+resque_and_redis_instance = resque_and_redis_instances.last
+
 node[:applications].each do |app, data|
   if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
     template "/data/#{app}/shared/config/resque.yml" do
@@ -61,7 +64,7 @@ node[:applications].each do |app, data|
       mode 0644
       source "resque.yml.erb"    
       variables({
-          :server_name => node[:utility_instances].first[:hostname]
+          :server_name => resque_and_redis_instance[:hostname]
       })    
     end  
   end

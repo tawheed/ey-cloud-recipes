@@ -1,3 +1,13 @@
+ # Drop requests to non-rails requests
+if ($request_filename ~* \.(aspx|php|jsp|cgi)$) {
+  return 410;
+}
+
+if ($host !~* connect\.(.*)) {
+  rewrite ^ https://www.toutapp.com$request_uri permanent;
+}
+
 if ($http_user_agent !~* 'Toutapp/1.1.1.1') {
   rewrite ^ https://$host$request_uri permanent;
 }
+

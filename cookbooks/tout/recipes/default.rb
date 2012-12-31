@@ -82,17 +82,17 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
 end
 
 # Set up remote_syslog
-execute "install remote_syslog gem" do
-  command "gem install remote_syslog"
-end
+# execute "install remote_syslog gem" do
+#   command "gem install remote_syslog"
+# end
 
-# Install the remote_syslog start/stop script.
-template '/etc/init.d/remote_syslog' do
-  owner 'root'
-  group 'root'
-  mode 0755
-  source 'init.d-remote_syslog.erb'
-end
+# # Install the remote_syslog start/stop script.
+# template '/etc/init.d/remote_syslog' do
+#   owner 'root'
+#   group 'root'
+#   mode 0755
+#   source 'init.d-remote_syslog.erb'
+# end
 
 if ['solo', 'util'].include?(node[:instance_role])
   # Install the script for forcefully shutting down non-essential workers
@@ -125,6 +125,6 @@ template "/etc/log_files.yml" do
   })
 end  
 
-execute "ensure-remote-syslog-is-running" do
-    command "/etc/init.d/remote_syslog restart"
-end
+# execute "ensure-remote-syslog-is-running" do
+#     command "/etc/init.d/remote_syslog restart"
+# end

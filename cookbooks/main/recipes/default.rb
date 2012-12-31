@@ -33,6 +33,9 @@ require_recipe "eybackup_slave"
 # uncomment to run the resque recipe
 require_recipe "resque"
 
+# uncomment to run the resque-scheduler recipe
+require_recipe "resque-scheduler"
+
 #uncomment to run the redis recipe
 require_recipe "redis"
 
