@@ -3,9 +3,5 @@ if ($request_filename ~* \.(aspx|php|jsp|cgi)$) {
   return 410;
 }
 
-set $subdomain "www";
-if ($host ~* connect\.(.*)) {
-  set $subdomain "connect";
-}
-
-rewrite ^ https://$subdomain.toutapp.com$request_uri permanent;
+# Ensure SSL
+rewrite ^ https://$host$request_uri permanent;

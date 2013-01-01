@@ -149,7 +149,6 @@ if['solo', 'util'].include?(node[:instance_role])
     'poppler',
     'poppler-data',
     'poppler-bindings',
-    'pdftk',
     'tesseract',
     'ghostscript',
     'corefonts'
