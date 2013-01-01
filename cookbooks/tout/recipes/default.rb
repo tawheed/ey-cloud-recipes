@@ -141,18 +141,17 @@ end
 
 # Set up DocSplit dependencies
 if['solo', 'util'].include?(node[:instance_role])
+  execute "upgrade-gcc" do
+    command "sudo emerge gcc"
+  end
+
   package_list = [
-    'openoffice-bin',
-    'openoffice-server',
-    'graphicsmagick',
     'poppler',
     'poppler-data',
     'poppler-bindings',
-    'ruby-poppler',
     'pdftk',
     'tesseract',
     'ghostscript',
-    'freefont-ttf',
     'corefonts'
   ]
   for package_name in package_list do
