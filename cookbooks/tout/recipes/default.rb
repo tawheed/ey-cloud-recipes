@@ -140,23 +140,19 @@ end
 # end
 
 # Set up DocSplit dependencies
-if['solo', 'util'].include?(node[:instance_role])
-  execute "upgrade-gcc" do
-    command "sudo emerge gcc"
-  end
-
-  package_list = [
-    'poppler',
-    'poppler-data',
-    'poppler-bindings',
-    'tesseract',
-    'ghostscript',
-    'corefonts'
-  ]
-  for package_name in package_list do
-    package package_name do
-      action [:install]
-    end
-  end  
-end
+# if['solo', 'util'].include?(node[:instance_role])
+#   package_list = [
+#     'poppler',
+#     'poppler-data',
+#     'poppler-bindings',
+#     'tesseract',
+#     'ghostscript',
+#     'corefonts'
+#   ]
+#   for package_name in package_list do
+#     package package_name do
+#       action [:install]
+#     end
+#   end  
+# end
 
