@@ -140,19 +140,32 @@ end
 # end
 
 # Set up DocSplit dependencies
-# if['solo', 'util'].include?(node[:instance_role])
-#   package_list = [
-#     'poppler',
-#     'poppler-data',
-#     'poppler-bindings',
-#     'tesseract',
-#     'ghostscript',
-#     'corefonts'
-#   ]
-#   for package_name in package_list do
-#     package package_name do
-#       action [:install]
-#     end
-#   end  
-# end
+if['solo', 'util'].include?(node[:instance_role])
+  package_list = [
+    'poppler',
+    'poppler-data',
+    'poppler-bindings',
+    'ghostscript',
+    'corefonts',
+    'openoffice-bin'
+  ]
+  for package_name in package_list do
+    package package_name do
+      action [:install]
+    end
+  end  
+end
 
+# Set up GraphicsMagick for DocSplit
+bash "install_graphics_magick" do |variable|
+  user "root"
+  cwd "/tmp"
+  code <<-EOH
+  wget ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/1.3/GraphicsMagick-1.3.15.tar.gz
+  tar -xvf GraphicsMagick-1.3.15.tar.gz
+  cd GraphicsMagick-1.3.15
+  ./configure
+  make
+  sudo make install
+  EOH
+end
