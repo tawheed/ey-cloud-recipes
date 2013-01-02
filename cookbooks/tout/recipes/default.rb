@@ -160,12 +160,12 @@ if['solo', 'util'].include?(node[:instance_role])
     user "root"
     cwd "/tmp"
     code <<-EOH
-    wget ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/1.3/GraphicsMagick-1.3.15.tar.gz
-    tar -xvf GraphicsMagick-1.3.15.tar.gz
-    cd GraphicsMagick-1.3.15
+    wget http://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.17/GraphicsMagick-1.3.17.tar.gz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fgraphicsmagick%2Ffiles%2Fgraphicsmagick-binaries%2F&ts=1357108140&use_mirror=iweb
+    tar -xvf GraphicsMagick-1.3.17.tar.gz
+    cd GraphicsMagick-1.3.17
     ./configure
     make
     sudo make install
     EOH
-  end  
+  end
 end
