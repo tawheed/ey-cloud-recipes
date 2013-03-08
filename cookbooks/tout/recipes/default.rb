@@ -167,5 +167,8 @@ if['solo', 'util'].include?(node[:instance_role])
     make
     sudo make install
     EOH
+    not_if do
+      File.exists?("/usr/local/bin/gm")
+    end
   end
 end

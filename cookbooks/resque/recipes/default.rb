@@ -9,7 +9,7 @@ if ['solo', 'util'].include?(node[:instance_role])
     not_if { "gem list | grep resque" }
   end
 
-  workers = %w{ab email gmail gmail,email analytics,email crm,user signals user}
+  workers = %w{ab email email gmail,email analytics,email crm,user signals user}
   num_workers = workers.length
   
   node[:applications].each do |app, data|
