@@ -70,14 +70,14 @@ if ['solo', 'util'].include?(node[:instance_role])
         mode 0644 
         source "monitrc.conf.erb" 
         variables({ 
-        :num_workers => 5,
+        :num_workers => 10,
         :app_name => app, 
         :rails_env => node[:environment][:framework_env] 
         }) 
         end
 
         count = 0
-        (1..5).each do
+        (1..10).each do
           template "/data/#{app}/shared/config/resque_#{count}.conf" do
             owner node[:owner_name]
             group node[:owner_name]
