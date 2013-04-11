@@ -9,6 +9,14 @@ if ['solo', 'util'].include?(node[:instance_role])
     not_if { "gem list | grep resque" }
   end
 
+  remote_file "/engineyard/bin/resque" do
+    source "resque"
+    owner 'root'
+    group 'root'
+    mode 0755
+    backup 0
+  end
+
   workers = %w{emailp1 emailp1,emailp3 fileprocessingp2,emailp1,emailp3 fileprocessingp2,emailp1,emailp3 emailp3,emailp1 backgroundp4,backgroundp5,backgroundp6 backgroundp5,backgroundp4,backgroundp6 longjobsp7}
   num_workers = workers.length
   
@@ -37,7 +45,8 @@ if ['solo', 'util'].include?(node[:instance_role])
             mode 0644
             source "resque.conf.erb"
             variables({
-              :queue => worker_queue
+              :queue => worker_queue,
+              :jobs_per_fork = 1
             })
           end
           count = count + 1
@@ -75,7 +84,8 @@ if ['solo', 'util'].include?(node[:instance_role])
             mode 0644
             source "resque.conf.erb"
             variables({
-              :queue => 'cache'
+              :queue => 'cache',
+              :jobs_per_fork = 1000
             })
           end
           count = count + 1
