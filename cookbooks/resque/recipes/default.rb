@@ -46,7 +46,7 @@ if ['solo', 'util'].include?(node[:instance_role])
             source "resque.conf.erb"
             variables({
               :queue => worker_queue,
-              :jobs_per_fork = 1
+              :jobs_per_fork => 1
             })
           end
           count = count + 1
@@ -85,7 +85,7 @@ if ['solo', 'util'].include?(node[:instance_role])
             source "resque.conf.erb"
             variables({
               :queue => 'cache',
-              :jobs_per_fork = 1000
+              :jobs_per_fork => 100000
             })
           end
           count = count + 1
