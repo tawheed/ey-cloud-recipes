@@ -7,7 +7,7 @@ if ($request_method != POST) {
 }
 
 if ($host ~* www\.toutapp\.com) {
-  set $test "${test}C"
+  set $test "${test}C";
 }
 
 if ($test = PC) {
