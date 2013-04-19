@@ -21,7 +21,7 @@ end
 if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Run metrics" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
-    hour "1"
+    hour "22"
     minute "0"
     user "deploy"
   end
