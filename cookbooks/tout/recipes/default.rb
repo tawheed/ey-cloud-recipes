@@ -18,7 +18,7 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   end
 end
 
-if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
+if node[:name] == 'Resque1' or node[:instance_role] == 'solo'
   cron "Run metrics" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
     hour "22"
