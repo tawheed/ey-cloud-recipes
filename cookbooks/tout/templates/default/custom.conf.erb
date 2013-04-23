@@ -3,5 +3,7 @@ if ($request_filename ~* \.(aspx|php|jsp|cgi)$) {
   return 410;
 }
 
-# Ensure SSL
-rewrite ^ https://$host$request_uri permanent;
+# Ensure SSL unless POST
+if ($request_method != POST) {
+  rewrite ^ https://$host$request_uri permanent;
+}
