@@ -17,7 +17,17 @@ if ['solo', 'util'].include?(node[:instance_role])
     backup 0
   end
 
-  workers = %w{emailp1 emailp1,emailp3 fileprocessingp2,emailp1,emailp3 fileprocessingp2,emailp1,emailp3 emailp3,emailp1 backgroundp4,backgroundp5,backgroundp6 backgroundp5,backgroundp4,backgroundp6 longjobsp7 longjobsp7}
+workers = [
+  'emailp1',
+  'emailp1,emailp3,backgroundp4',
+  'emailp3,emailp1',
+  'fileprocessingp2,emailp1,emailp3,backgroundp5',
+  'fileprocessingp2,emailp1,emailp3,backgroundp6',
+  'backgroundp4,backgroundp5,backgroundp6,longjobsp7',
+  'backgroundp5,backgroundp6,backgroundp4',
+  'longjobsp7,backgroundp6',
+  'longjobsp7,backgroundp6',
+  'longjobsp7,backgroundp6']
   num_workers = workers.length
   
   node[:applications].each do |app, data|
@@ -70,14 +80,14 @@ if ['solo', 'util'].include?(node[:instance_role])
         mode 0644 
         source "monitrc.conf.erb" 
         variables({ 
-        :num_workers => 10,
+        :num_workers => 8,
         :app_name => app, 
         :rails_env => node[:environment][:framework_env] 
         }) 
         end
 
         count = 0
-        (1..10).each do
+        (1..8).each do
           template "/data/#{app}/shared/config/resque_#{count}.conf" do
             owner node[:owner_name]
             group node[:owner_name]

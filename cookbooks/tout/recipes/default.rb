@@ -27,6 +27,15 @@ if node[:name] == 'Resque1' or node[:instance_role] == 'solo'
   end
 end
 
+if node[:name] == 'Resque1' or node[:instance_role] == 'solo'
+  cron "Run mailbox monitoring" do
+    command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake tout:mailbox_monitor"
+    minute "*/30"
+    user "deploy"
+  end
+end
+
+
 # Set up Database configuration for Tout Admin
 
 if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
