@@ -26,7 +26,6 @@ workers = [
   'backgroundp4,backgroundp5,backgroundp6,longjobsp7',
   'backgroundp5,backgroundp6,backgroundp4',
   'longjobsp7,backgroundp6',
-  'longjobsp7,backgroundp6',
   'longjobsp7,backgroundp6']
   num_workers = workers.length
   
@@ -95,7 +94,7 @@ workers = [
             source "resque.conf.erb"
             variables({
               :queue => 'cache',
-              :jobs_per_fork => 100000
+              :jobs_per_fork => 25000
             })
           end
           count = count + 1
