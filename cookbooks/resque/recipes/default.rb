@@ -73,20 +73,21 @@ workers = [
           }
         end
       elsif(node[:name].match(/Cacher/))
+        num_cacher_workers = 7
         template "/etc/monit.d/resque_#{app}.monitrc" do 
-        owner 'root' 
-        group 'root' 
-        mode 0644 
-        source "monitrc.conf.erb" 
-        variables({ 
-        :num_workers => 8,
-        :app_name => app, 
-        :rails_env => node[:environment][:framework_env] 
-        }) 
+          owner 'root' 
+          group 'root' 
+          mode 0644 
+          source "monitrc.conf.erb" 
+          variables({ 
+          :num_workers => num_cacher_workers,
+          :app_name => app, 
+          :rails_env => node[:environment][:framework_env] 
+          }) 
         end
 
         count = 0
-        (1..8).each do
+        (1..num_cacher_workers).each do
           template "/data/#{app}/shared/config/resque_#{count}.conf" do
             owner node[:owner_name]
             group node[:owner_name]
