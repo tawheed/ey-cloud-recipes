@@ -35,6 +35,15 @@ if node[:name] == 'Resque1' or node[:instance_role] == 'solo'
   end
 end
 
+if node[:name] == 'Cacher'
+  cron "Nightly reboots" do
+    command "sudo reboot"
+    hour "23"
+    minute "0"
+    user "deploy"
+  end
+end
+
 
 # Set up Database configuration for Tout Admin
 
