@@ -37,7 +37,7 @@ end
 
 if node[:name] == 'Cacher'
   cron "Nightly reboots" do
-    command "sudo reboot"
+    command "monit -g Tout_resque stop all; sleep 10m; sudo reboot"
     hour "23"
     minute "0"
     user "deploy"
