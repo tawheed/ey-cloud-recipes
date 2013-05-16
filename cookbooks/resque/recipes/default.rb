@@ -94,7 +94,7 @@ workers = [
             mode 0644
             source "resque.conf.erb"
             variables({
-              :queue => 'cachep1,cachep2',
+              :queue => 'cachep1,cachep2,cache',
               :jobs_per_fork => 25000
             })
           end
