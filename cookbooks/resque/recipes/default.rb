@@ -73,7 +73,7 @@ workers = [
           }
         end
       elsif(node[:name].match(/Cacher/))
-        num_cacher_workers = 7
+        num_cacher_workers = 6
         template "/etc/monit.d/resque_#{app}.monitrc" do 
           owner 'root' 
           group 'root' 
