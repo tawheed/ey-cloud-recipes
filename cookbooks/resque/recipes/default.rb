@@ -73,7 +73,7 @@ workers = [
           }
         end
       elsif(node[:name].match(/Cacher/))
-        num_cacher_workers = 5
+        num_cacher_workers = 7
         template "/etc/monit.d/resque_#{app}.monitrc" do 
           owner 'root' 
           group 'root' 
@@ -94,8 +94,8 @@ workers = [
             mode 0644
             source "resque.conf.erb"
             variables({
-              :queue => 'cachep1,cachep2,cache',
-              :jobs_per_fork => 10000
+              :queue => 'cachep0,cachep1,cachep2,cache',
+              :jobs_per_fork => 15000
             })
           end
           count = count + 1
