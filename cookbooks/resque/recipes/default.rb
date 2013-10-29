@@ -22,8 +22,8 @@ workers = [
   'emailp1,emailp3,backgroundp4',
   'emailp3,emailp1',
   'fileprocessingp2,emailp1,emailp3,backgroundp5',
-  'fileprocessingp2,emailp1,emailp3,backgroundp6',
-  'backgroundp4,backgroundp5,backgroundp6,longjobsp7',
+  'fileprocessingp2,emailp1,emailp3,backgroundp5,backgroundp6',
+  'backgroundp4,backgroundp5,backgroundp6',
   'backgroundp5,backgroundp6,backgroundp4',
   'longjobsp7,backgroundp6',
   'longjobsp7,backgroundp6']
