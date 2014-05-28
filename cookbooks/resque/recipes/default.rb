@@ -18,13 +18,13 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 
 workers = [
-  'emailp1',
+  'emailp1,backgroundp4',
   'emailp1,emailp3,backgroundp4',
   'emailp3,emailp1,backgroundp4',
-  'fileprocessingp2,emailp1,emailp3,backgroundp5,backgroundp4',
-  'fileprocessingp2,emailp1,emailp3,backgroundp5,backgroundp6,backgroundp4',
+  'fileprocessingp2,emailp1,emailp3,backgroundp4,backgroundp5',
+  'fileprocessingp2,emailp1,emailp3,backgroundp4,backgroundp5,backgroundp6',
   'backgroundp4,backgroundp5,backgroundp6',
-  'longjobsp7,backgroundp6,backgroundp4']
+  'longjobsp7,backgroundp4,backgroundp6']
   num_workers = workers.length
   
   node[:applications].each do |app, data|
