@@ -134,6 +134,16 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
+if ['solo', 'app'].include?(node[:instance_role])
+  # Install the script for forcefully shutting down stale unicorns
+  template "/data/Tout/kill_stale_unicorns" do 
+    owner 'deploy'
+    group 'deploy'
+    mode 0755
+    source 'kill_stale_unicorns.erb'
+  end
+end
+
 # Set up the configuration file
 template "/etc/log_files.yml" do
   @log_files = ["/var/log/nginx/*", "/var/log/chef.main.log", "/var/log/chef.custom.log", "/var/log/mysql/*", "/db/mysql/log/slow_query.log"]
