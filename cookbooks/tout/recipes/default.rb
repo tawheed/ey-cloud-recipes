@@ -183,6 +183,13 @@ if['solo', 'util'].include?(node[:instance_role])
     end
   end  
 
+  # Remove ey-snapshot task for Prooduction database instances
+  if ['db_master','db_slave'].include?(node[:instance_role])
+    cron ey-snapshots do
+      action :delete
+    end
+  end
+
   # Set up GraphicsMagick for DocSplit
   bash "install_graphics_magick" do |variable|
     user "root"
