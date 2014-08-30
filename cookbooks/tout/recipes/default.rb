@@ -169,7 +169,7 @@ end
 
 # Remove ey-snapshot task for Prooduction database instances
 if ['db_master','db_slave'].include?(node[:instance_role])
-  cron ey-snapshots do
+  cron "ey-snapshots" do
     action :delete
   end
 end
