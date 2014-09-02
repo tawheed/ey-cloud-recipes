@@ -4,7 +4,6 @@
   username:  <%= @dbuser %>
   password:  <%= @dbpass %>
   host:      <%= @dbhost %>
-  encoding: utf8
   reconnect: true
 
 <% @slaves.each_with_index do |slave,i| %>
@@ -14,6 +13,5 @@
   username:  <%= @dbuser %>
   password:  <%= @dbpass %>
   host:      <%= slave %>
-  encoding: utf8
   reconnect: true
 <% end %>
