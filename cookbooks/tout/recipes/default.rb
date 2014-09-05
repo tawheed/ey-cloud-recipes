@@ -207,4 +207,15 @@ if['solo', 'util'].include?(node[:instance_role])
       File.exists?("/usr/local/bin/gm")
     end
   end
+
+if ['solo', 'util'].include?(node[:instance_role])
+# Install the script for forcefully shutting down stuck workers
+  template "/data/Tout/killstalejobs.sh" do 
+    owner 'deploy'
+    group 'deploy'
+    mode 0755
+    source 'killstalejobs.sh.erb'
+  end
+end
+
 end
