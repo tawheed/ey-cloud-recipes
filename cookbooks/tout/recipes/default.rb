@@ -236,6 +236,8 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
+Chef::Log.info("dbtype #{node[:instance_role]}")
+
 if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   template "/data/Tout/shared/config/database.yml" do
     action :create
@@ -251,10 +253,9 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
     variables({
         :dbtype   => dbtype,
         :dbname   => 'Tout',
-        :username => node.engineyard.environment.ssh_username,
-        :password => node.engineyard.environment.ssh_password,
-        :host     => node.engineyard.environment.db_host,
-        :log_files => @log_files,
+        :dbuser => node.engineyard.environment.ssh_username,
+        :dbpass => node.engineyard.environment.ssh_password,
+        :dbhost     => node.engineyard.environment.db_host,
         :slaves => node.engineyard.environment.db_slaves_hostnames
     })
   end
