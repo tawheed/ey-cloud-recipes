@@ -68,6 +68,7 @@ if [ "$KILLEM" == "true" ]; then
     echo -e "\033[1mForcefully killing stuck workers (again, just to be sure)...\033[0m"
     $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=%5bWARNING%5d%20Killing%20stuck%20worker%20jobs%20again..." > /tmp/hipchat
     kill -9 $PIDS
+  fi
 fi
 
 if [ "$DEBUG" == "true" ]; then
