@@ -90,22 +90,23 @@ end
 
 # Set up SSL forced redirect for Tout
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-  cookbook_file "custom.conf" do
+  template "custom.conf" do
     path "/etc/nginx/servers/Tout/custom.conf"
     owner node[:owner_name]
     group node[:owner_name]
     mode 0644
-    source "custom.conf"    
+    source "custom.conf.erb"    
   end  
 end
 
 # Set up SSL subdomain handling
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-  cookbook_file "custom.ssl.conf" do
+  template "custom.ssl.conf" do
     owner node[:owner_name]
     group node[:owner_name]
     mode 0644
     path "/etc/nginx/servers/Tout/custom.ssl.conf"
+    source "custom.ssl.conf.erb"
   end  
 end
 
@@ -127,21 +128,23 @@ if ['solo', 'util'].include?(node[:instance_role])
   # Install the script for forcefully shutting down non-essential workers
   # and for gracefully shutting down essential workers 
   # so that deployment can proceed
-  cookbook_file 'shutdown_workers' do 
+  template 'shutdown_workers' do 
     owner 'deploy'
     group 'deploy'
     mode 0755
     path "/data/Tout/shutdown_workers"
+    source "shutdown_workers.erb"
   end
 end
 
 if ['solo', 'app'].include?(node[:instance_role])
   # Install the script for forcefully shutting down stale unicorns
-  cookbook_file 'kill_stale_unicorns' do 
+  template 'kill_stale_unicorns' do 
     owner 'deploy'
     group 'deploy'
     mode 0755
     path "/data/Tout/kill_stale_unicorns"
+    source "kill_stale_unicorns.erb"
   end
 end
 
@@ -211,12 +214,13 @@ if['solo', 'util'].include?(node[:instance_role])
 
 if ['solo', 'util'].include?(node[:instance_role])
 # Install the script for forcefully shutting down stuck workers
-  cookbook_file "killstalejobs.sh"  do 
+  template "killstalejobs.sh"  do 
     action :create_if_missing
     owner 'deploy'
     group 'deploy'
     mode 0755
     path "/data/Tout/killstalejobs.sh"
+    source "killstalejobs.sh.erb"
   end
 end
 
