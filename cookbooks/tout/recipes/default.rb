@@ -210,7 +210,7 @@ if['solo', 'util'].include?(node[:instance_role])
 
 if ['solo', 'util'].include?(node[:instance_role])
 # Install the script for forcefully shutting down stuck workers
-  cookbook_file node[:tout][:killstalejobs_path] do 
+  cookbook_file "/data/Tout/killstalejobs.sh" do 
     action :create_if_missing
     owner 'deploy'
     group 'deploy'
@@ -241,7 +241,7 @@ if ['db_master','db_slave'].include?(node[:instance_role])
              end
     variables({
         :dbtype   => dbtype,
-        :dbname   => node[:tout][:dbname],
+        :dbname   => 'Tout',
         :username => node.engineyard.environment.ssh_username,
         :password => node.engineyard.environment.ssh_password,
         :host     => node.engineyard.environment.db_host,
