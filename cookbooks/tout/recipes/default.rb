@@ -247,6 +247,7 @@ if ['db_master','db_slave'].include?(node[:instance_role])
         :host     => node.engineyard.environment.db_host,
         :log_files => @log_files
     })
+  end
 end
 
 end
