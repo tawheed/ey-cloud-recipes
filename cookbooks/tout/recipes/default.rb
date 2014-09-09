@@ -224,7 +224,9 @@ if['solo', 'util'].include?(node[:instance_role])
       File.exists?("/usr/local/bin/gm")
     end
   end
+end
 
+Chef::Log.info("J2")
 if ['solo', 'util'].include?(node[:instance_role])
 # Install the script for forcefully shutting down stuck workers
   template "killstalejobs.sh"  do 
@@ -272,6 +274,4 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
         :slaves => node.engineyard.environment.db_slaves_hostnames
     })
   end
-end
-
 end
