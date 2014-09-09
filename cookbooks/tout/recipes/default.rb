@@ -216,7 +216,7 @@ end
 if ['solo', 'util'].include?(node[:instance_role])
 # Install the script for forcefully shutting down stuck workers
   template "killstalejobs.sh"  do 
-    action :create_if_missing
+    action :create
     owner 'deploy'
     group 'deploy'
     mode 0755
