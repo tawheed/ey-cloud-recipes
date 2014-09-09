@@ -254,7 +254,7 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
         :username => node.engineyard.environment.ssh_username,
         :password => node.engineyard.environment.ssh_password,
         :host     => node.engineyard.environment.db_host,
-        :log_files => @log_files
+        :log_files => @log_files,
         :slaves => node.engineyard.environment.db_slaves_hostnames
     })
   end
