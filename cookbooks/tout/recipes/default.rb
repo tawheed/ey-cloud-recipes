@@ -235,7 +235,7 @@ if ['solo', 'util'].include?(node[:instance_role])
 end
 
 if ['db_master','db_slave'].include?(node[:instance_role])
-  template "/data/Tout/current/config/database.yml" do
+  template "/data/Tout/shared/config/database.yml" do
     owner node.engineyard.environment.ssh_username
     group node.engineyard.environment.ssh_username
     mode 0655
