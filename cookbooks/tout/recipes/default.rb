@@ -234,7 +234,7 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
-if ['db_master','db_slave'].include?(node[:instance_role])
+if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   template "/data/Tout/shared/config/database.yml" do
     action :create
     owner node.engineyard.environment.ssh_username
