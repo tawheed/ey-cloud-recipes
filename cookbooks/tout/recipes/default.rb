@@ -20,6 +20,8 @@ if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   end
 end
 
+Chef::Log.info("A")
+
 if node[:name] == 'Resque1' or node[:instance_role] == 'solo'
   cron "Run metrics" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake metrics:process"
@@ -37,6 +39,7 @@ if node[:name] == 'Resque1' or node[:instance_role] == 'solo'
   end
 end
 
+Chef::Log.info("B")
 if node[:name] == 'Cacher'
   cron "Nightly reboots" do
     command "monit -g Tout_resque stop all; sleep 10m; sudo reboot"
@@ -77,6 +80,7 @@ end
 #   end
 # end
 
+Chef::Log.info("C")
 # Set up Custom SSL config for security purposes
 if ['app', 'app_master'].include?(node[:instance_role])
   node.engineyard.apps.each do |app|
@@ -90,6 +94,7 @@ if ['app', 'app_master'].include?(node[:instance_role])
   end
 end
 
+Chef::Log.info("D")
 # Set up SSL forced redirect for Tout
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
   template "custom.conf" do
@@ -101,6 +106,7 @@ if ['solo', 'app', 'app_master'].include?(node[:instance_role])
   end  
 end
 
+Chef::Log.info("E")
 # Set up SSL subdomain handling
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
   template "custom.ssl.conf" do
@@ -126,6 +132,7 @@ end
 #   source 'init.d-remote_syslog.erb'
 # end
 
+Chef::Log.info("F")
 if ['solo', 'util'].include?(node[:instance_role])
   # Install the script for forcefully shutting down non-essential workers
   # and for gracefully shutting down essential workers 
@@ -139,6 +146,7 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
+Chef::Log.info("G")
 if ['solo', 'app'].include?(node[:instance_role])
   # Install the script for forcefully shutting down stale unicorns
   template 'kill_stale_unicorns' do 
@@ -150,6 +158,7 @@ if ['solo', 'app'].include?(node[:instance_role])
   end
 end
 
+Chef::Log.info("H")
 # Set up the configuration file
 template "/etc/log_files.yml" do
   @log_files = ["/var/log/nginx/*", "/var/log/chef.main.log", "/var/log/chef.custom.log", "/var/log/mysql/*", "/db/mysql/log/slow_query.log"]
@@ -173,6 +182,7 @@ end
 #     command "/etc/init.d/remote_syslog restart"
 # end
 
+Chef::Log.info("I")
 # Remove ey-snapshot task for Prooduction database instances
 if ['db_master','db_slave'].include?(node[:instance_role])
   cron "ey-snapshots" do
@@ -181,6 +191,7 @@ if ['db_master','db_slave'].include?(node[:instance_role])
 end
 
 
+Chef::Log.info("J")
 # Set up DocSplit dependencies
 if['solo', 'util'].include?(node[:instance_role])
   package_list = [
@@ -226,6 +237,7 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
+Chef::Log.info("K")
 if ['solo', 'util'].include?(node[:instance_role])
 # Cron the stuck worker job
   cron "Kill the stuck workers" do
@@ -236,7 +248,8 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
-Chef::Log.info("dbtype #{node[:instance_role]}")
+Chef::Log.info("L")
+Chef::Log.info("Instance role #{node[:instance_role]}")
 
 if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   template "/data/Tout/shared/config/database.yml" do
@@ -246,7 +259,7 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
     mode 0655
     source "database.yml.erb"
     dbtype = case node.engineyard.environment.db_stack
-             when DNApi::DbStack::Mysql     then node.engineyard.environment.ruby_component.mysql_adapter
+             when DNApi::DbStack::Mysql     then 'mysql'
              when DNApi::DbStack::Postgres  then 'postgresql'
              when DNApi::DbStack::Postgres9 then 'postgresql'
              end
