@@ -5,7 +5,7 @@
 
 # Set up CRON Jobs
 
-Chef::Log.info("Instance role #{node[:instance_role]}"
+Chef::Log.info("Instance role #{node[:instance_role]}")
 
 if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Enqueue Scheduled Tout Pitches" do
