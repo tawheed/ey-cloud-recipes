@@ -5,6 +5,8 @@
 
 # Set up CRON Jobs
 
+Chef::Log.info("Instance role #{node[:instance_role]}"
+
 if node[:name] == 'ResqueAndRedis' or node[:instance_role] == 'solo'
   cron "Enqueue Scheduled Tout Pitches" do
     command "cd /data/Tout/current; RAILS_ENV=production bundle exec rake tout:scheduler"
@@ -253,6 +255,7 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
         :password => node.engineyard.environment.ssh_password,
         :host     => node.engineyard.environment.db_host,
         :log_files => @log_files
+        :slaves => node.engineyard.environment.db_slaves_hostnames
     })
   end
 end
