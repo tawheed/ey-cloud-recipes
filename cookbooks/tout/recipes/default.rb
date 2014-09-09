@@ -218,4 +218,14 @@ if ['solo', 'util'].include?(node[:instance_role])
   end
 end
 
+if ['solo', 'util'].include?(node[:instance_role])
+# Cron the stuck worker job
+  cron "Kill the stuck workers" do
+    command "/data/Tout/killstalejobs.sh -k"
+    hour "23"
+    minute "40"
+    user "deploy"
+  end
+end
+
 end
