@@ -236,6 +236,7 @@ end
 
 if ['db_master','db_slave'].include?(node[:instance_role])
   template "/data/Tout/shared/config/database.yml" do
+    action :create
     owner node.engineyard.environment.ssh_username
     group node.engineyard.environment.ssh_username
     mode 0655
