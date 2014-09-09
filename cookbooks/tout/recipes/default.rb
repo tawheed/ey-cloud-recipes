@@ -90,21 +90,21 @@ end
 
 # Set up SSL forced redirect for Tout
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-  template "/etc/nginx/servers/Tout/custom.conf" do
+  cookbook_file "/etc/nginx/servers/Tout/custom.conf" do
     owner node[:owner_name]
     group node[:owner_name]
     mode 0644
-    source "custom.conf.erb"    
+    source "custom.conf"    
   end  
 end
 
 # Set up SSL subdomain handling
 if ['solo', 'app', 'app_master'].include?(node[:instance_role])
-  template "/etc/nginx/servers/Tout/custom.ssl.conf" do
+  cookbook_file "/etc/nginx/servers/Tout/custom.ssl.conf" do
     owner node[:owner_name]
     group node[:owner_name]
     mode 0644
-    source "custom.ssl.conf.erb"    
+    source "custom.ssl.conf"
   end  
 end
 
@@ -126,21 +126,21 @@ if ['solo', 'util'].include?(node[:instance_role])
   # Install the script for forcefully shutting down non-essential workers
   # and for gracefully shutting down essential workers 
   # so that deployment can proceed
-  template "/data/Tout/shutdown_workers" do 
+  cookbook_file "/data/Tout/shutdown_workers" do 
     owner 'deploy'
     group 'deploy'
     mode 0755
-    source 'shutdown_workers.erb'
+    source 'shutdown_workers'
   end
 end
 
 if ['solo', 'app'].include?(node[:instance_role])
   # Install the script for forcefully shutting down stale unicorns
-  template "/data/Tout/kill_stale_unicorns" do 
+  cookbook_file "/data/Tout/kill_stale_unicorns" do 
     owner 'deploy'
     group 'deploy'
     mode 0755
-    source 'kill_stale_unicorns.erb'
+    source 'kill_stale_unicorns'
   end
 end
 
@@ -210,11 +210,11 @@ if['solo', 'util'].include?(node[:instance_role])
 
 if ['solo', 'util'].include?(node[:instance_role])
 # Install the script for forcefully shutting down stuck workers
-  template "/data/Tout/killstalejobs.sh" do 
+  cookbook_file node[:tout][:killstalejobs_path] do 
+    action :create_if_missing
     owner 'deploy'
     group 'deploy'
     mode 0755
-    source 'killstalejobs.sh.erb'
   end
 end
 
@@ -226,6 +226,28 @@ if ['solo', 'util'].include?(node[:instance_role])
     minute "40"
     user "deploy"
   end
+end
+
+if ['db_master','db_slave'].include?(node[:instance_role])
+  template "/data/Tout/current/config/database.yml" do
+    owner node.engineyard.environment.ssh_username
+    group node.engineyard.environment.ssh_username
+    mode 0655
+    source "database.yml.erb"
+    dbtype = case node.engineyard.environment.db_stack
+             when DNApi::DbStack::Mysql     then node.engineyard.environment.ruby_component.mysql_adapter
+             when DNApi::DbStack::Postgres  then 'postgresql'
+             when DNApi::DbStack::Postgres9 then 'postgresql'
+             end
+    variables({
+        :dbtype   => dbtype,
+        :dbname   => node[:tout][:dbname],
+        :username => node.engineyard.environment.ssh_username,
+        :password => node.engineyard.environment.ssh_password,
+        :host     => node.engineyard.environment.db_host,
+        :log_files => @log_files
+    })
+  do
 end
 
 end
