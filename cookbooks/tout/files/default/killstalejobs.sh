@@ -41,13 +41,6 @@ if [ "$DEBUG" == "true" ]; then
     sleep 3
 fi
 
-# Roughly speaking, debug is associated with STAGING
-if [ "$DEBUG" == "true" ]; then
-    environment_name='STAGING'
-else
-    environment_name='PRODUCTION'
-fi
-
 echo -e "\033[1mPreview of stuck workers...\033[0m"
 if [ "$DEBUG" != "true" ]; then
     PIDS=$($PS aux |grep -P "\S+\s+\S+\s+\d+\.\d+\s+\d+\.\d+\s+\d+\s+\d+\s+\S+\s+\S+\s+[A-Z][a-z]*\d\d\s+" \
@@ -62,18 +55,18 @@ echo Targeting processes: [ $PIDS ]
 if [ "$KILLEM" == "true" ]; then
   if [ "$PIDS" == "" ]; then
     echo -e "\033[1mNo stuck workers to kill :-)\033[0m"   
-    $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=No%20stuck%20workers%20to%20kill%20on%20$environment_name%20environment%20:-)" > /tmp/hipchat
+    $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=No%20stuck%20workers%20to%20kill%20:-)" > /tmp/hipchat
     exit 0
    else
     echo -e "\033[1mForcefully killing stuck worker jobs...\033[0m"
-    $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=%5bWARNING%5d%20Forcefully%20killing%20stuck%20worker%20jobs...on%20$environment_name%20environment" > /tmp/hipchat
+    $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=%5bWARNING%5d%20Forcefully%20killing%20stuck%20worker%20jobs..." > /tmp/hipchat
     kill -9 $PIDS
 
     echo -e "\033[1mWaiting for a bit before killing recommences...\033[0m"
     sleep 5
 
     echo -e "\033[1mForcefully killing stuck workers (again, just to be sure)...\033[0m"
-    $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=%5bWARNING%5d%20Killing%20stuck%20worker%20jobs%20again...on%20$environment_name%20environment" > /tmp/hipchat
+    $CURL "$URLBASE?room_id=$HIPCHAT_ROOM&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=%5bWARNING%5d%20Killing%20stuck%20worker%20jobs%20again..." > /tmp/hipchat
     kill -9 $PIDS
 fi
 
