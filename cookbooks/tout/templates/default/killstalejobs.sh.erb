@@ -44,11 +44,11 @@ fi
 echo -e "\033[1mPreview of stuck workers...\033[0m"
 if [ "$DEBUG" != "true" ]; then
     PIDS=$($PS aux |grep -P "\S+\s+\S+\s+\d+\.\d+\s+\d+\.\d+\s+\d+\s+\d+\s+\S+\s+\S+\s+[A-Z][a-z]*\d\d\s+" \
-    | grep 'Processing ' | awk '{print $2}')
+    | grep 'Processing ' | grep -vi "delayed" | awk '{print $2}')
 else
     echo "Inverting the date check"
     PIDS=$($PS aux |grep -P "\S+\s+\S+\s+\d+\.\d+\s+\d+\.\d+\s+\d+\s+\d+\s+\S+\s+\S+\s+\S+:\S+\s+" \
-    | grep 'Processing ' |grep -v grep | awk '{print $2}')
+    | grep 'Processing ' | grep -vi "delayed" | grep -v grep | awk '{print $2}')
 fi
 echo Targeting processes: [ $PIDS ]
 
