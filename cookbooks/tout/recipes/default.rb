@@ -254,33 +254,38 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
   end
 end
 
-if node[:instance_role] == 'solo'
-  template "/var/tmp/2remote.pl" do
+template "/var/tmp/2remote.pl" do
     action :create
     owner node.engineyard.environment.ssh_username
     group node.engineyard.environment.ssh_username
     mode 0655
     source "2remote.pl.erb"
-  end
-  execute "Run named pipe program" do
-    command "cd /opt/tmp; nohup sudo /opt/tmp/2remote.pl &"
-    user "deploy"
-  end
+    notifies :run, "execute[Run named pipe program]", :immediately
 end
 
-if node[:instance_role] == 'solo'
-  template "/etc/syslog.conf" do
+execute "Run named pipe program" do
+    command "cd /opt/tmp; nohup sudo /opt/tmp/2remote.pl &"
+    user "deploy"
+    notifies :run, "execute[hipchat pipe]", :immediately
+end
+
+execute "hipchat pipe" do
+    command "/usr/bin/curl https://api.hipchat.com/v1/rooms/message&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=Set up monitoring on #{node[:name]} #{node[:hostname]}"
+    user "deploy"
+end
+
+template "/etc/syslog.conf" do
     action :create
     owner 'deploy'
     group 'deploy'
     mode 0744
     source "syslog.conf.erb"
     notifies :run, "service[syslog]", :immediately
-  end
-
-  service "syslog" do
-    action :restart
-  end
 end
+
+service "syslog" do
+    action :restart
+end
+
 
 
