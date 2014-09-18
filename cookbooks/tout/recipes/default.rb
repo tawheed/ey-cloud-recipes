@@ -266,7 +266,7 @@ end
 bash "Run_named_pipe_program" do
     code "cd /opt/tmp; nohup sudo /opt/tmp/2remote.pl &"
     user "deploy"
-    notifies :run, "execute[hipchat_post]", :immediately
+    notifies :run, "bash[hipchat_post]", :immediately
 end
 
 bash "hipchat_post" do
