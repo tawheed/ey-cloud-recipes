@@ -270,7 +270,8 @@ bash "Run_named_pipe_program" do
 end
 
 bash "hipchat_post" do
-    code "/usr/bin/curl https://api.hipchat.com/v1/rooms/message&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=Set up monitoring on #{node[:name]} #{node[:hostname]}"
+    thecommand="/usr/bin/curl https://api.hipchat.com/v1/rooms/message\&notify=1\&color=red\&from=DeployMan\&auth_token=0f781b3c91579fff8fbead396e1fc6\&message=Set up monitoring on #{node[:name]} #{node[:hostname]}"
+    code "thecommand"
     user "deploy"
 end
 
