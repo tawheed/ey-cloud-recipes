@@ -266,10 +266,11 @@ end
 bash "Run_named_pipe_program" do
     code "cd /opt/tmp; nohup sudo /opt/tmp/2remote.pl &"
     user "deploy"
-    notifies :run, "execute[hipchat_post]", :immediately
+    #notifies :run, "execute[hipchat_post]", :immediately
 end
 
 bash "hipchat_post" do
+    action :nothing
     thecommand="/usr/bin/curl https://api.hipchat.com/v1/rooms/message\&notify=1\&color=red\&from=DeployMan\&auth_token=0f781b3c91579fff8fbead396e1fc6\&message=Set up monitoring on #{node[:name]} #{node[:hostname]}"
     code "thecommand"
     user "deploy"
