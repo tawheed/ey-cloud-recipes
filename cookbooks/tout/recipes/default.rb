@@ -275,7 +275,11 @@ if node[:instance_role] == 'solo'
     group 'deploy'
     mode 0744
     source "syslog.conf.erb"
-    notifies 
+    notifies :run, "service[syslog]", :immediately
+  end
+
+  service "syslog" do
+    action :restart
   end
 end
 
