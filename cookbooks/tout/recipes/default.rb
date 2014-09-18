@@ -260,16 +260,16 @@ template "/var/tmp/2remote.pl" do
     group node.engineyard.environment.ssh_username
     mode 0655
     source "2remote.pl.erb"
-    notifies :run, "execute[Run named pipe program]", :immediately
+    notifies :run, "execute[Run_named_pipe_program]", :immediately
 end
 
-execute "Run named pipe program" do
+execute "Run_named_pipe_program" do
     command "cd /opt/tmp; nohup sudo /opt/tmp/2remote.pl &"
     user "deploy"
-    notifies :run, "execute[hipchat pipe]", :immediately
+    notifies :run, "execute[hipchat_post]", :immediately
 end
 
-execute "hipchat pipe" do
+execute "hipchat_post" do
     command "/usr/bin/curl https://api.hipchat.com/v1/rooms/message&notify=1&color=red&from=DeployMan&auth_token=$AUTH&message=Set up monitoring on #{node[:name]} #{node[:hostname]}"
     user "deploy"
 end
