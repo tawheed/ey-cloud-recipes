@@ -282,10 +282,10 @@ template "/etc/syslog.conf" do
     group 'deploy'
     mode 0744
     source "syslog.conf.erb"
-    #notifies :run, "service[syslog]", :immediately
+    #notifies :run, "service[sysklogd]", :immediately
 end
 
-service "syslog" do
+service "sysklogd" do
     action :nothing
 end
 
