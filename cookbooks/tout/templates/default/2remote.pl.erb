@@ -1,0 +1,27 @@
+#!/usr/bin/perl -w
+# logrelay - relays fifo (named pipe) to remote syslogd
+my $FIFO = '/var/tmp/logrelay';
+my $loghost = '54.165.188.183';
+my $logport = 3333;
+
+$0 =~ m|([^:/\\]+)$|; # scriptname (without path) for logging
+my $script = $1;
+use IO::Socket;
+while (1) {
+unless (-p $FIFO) {
+unlink $FIFO;
+system('mknod', $FIFO, 'p')
+&& die "can't mknod $FIFO: $!";
+}
+open (FIFO, "$FIFO") or die "Can't open $FIFO: $!";
+while ( <FIFO> ) {
+$remote = IO::Socket::INET->new( Proto => "tcp",
+PeerAddr => $loghost,
+PeerPort => $logport,
+);
+unless ($remote) { die "can't connect to $loghost:$logport" }
+$remote->autoflush(1);
+print $remote "$script: $_";
+close $remote;
+}
+}

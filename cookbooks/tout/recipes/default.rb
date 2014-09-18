@@ -253,3 +253,30 @@ if ['solo', 'app', 'app_master', 'util'].include?(node[:instance_role])
     })
   end
 end
+
+if node[:instance_role] == 'solo'
+  template "/var/tmp/2remote.pl" do
+    action :create
+    owner node.engineyard.environment.ssh_username
+    group node.engineyard.environment.ssh_username
+    mode 0655
+    source "2remote.pl.erb"
+  end
+  execute "Run named pipe program" do
+    command "cd /opt/tmp; nohup sudo /opt/tmp/2remote.pl &"
+    user "deploy"
+  end
+end
+
+if node[:instance_role] == 'solo'
+  template "/etc/syslog.conf" do
+    action :create
+    owner 'deploy'
+    group 'deploy'
+    mode 0744
+    source "syslog.conf.erb"
+    notifies 
+  end
+end
+
+
